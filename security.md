@@ -1,6 +1,6 @@
-# 🎯 Fortnite Terminal Cheat | ResPocket Edition (2026)
+# 🎯 Fortnite Absolute Cheat | ResPocket Edition (2026)
 
-**Fortnite Terminal Cheat | ResPocket Edition** refers to a class of third‑party tools designed to interact with *Fortnite*'s memory space, often through a command-line or lightweight external interface. By relying on external memory reading and writing, these tools provide a wide range of enhancements — from ESP (players, loot, chests, vehicles) to silent aimbot, no recoil, and client‑side skin changers. Their external architecture and regular offset updates aim to keep them undetected by Easy Anti‑Cheat (EAC) and BattlEye. This analysis examines their architecture, feature implementations, and evasion strategies.
+**Fortnite Absolute Cheat | ResPocket Edition** refers to a class of third‑party tools designed to interact with *Fortnite*'s memory space, often through a command-line or lightweight external interface. By relying on external memory reading and writing, these tools provide a wide range of enhancements — from ESP (players, loot, chests, vehicles) to silent aimbot, no recoil, and client‑side skin changers. Their external architecture and regular offset updates aim to keep them undetected by Easy Anti‑Cheat (EAC) and BattlEye. This analysis examines their architecture, feature implementations, and evasion strategies.
 
 ---
 
@@ -102,7 +102,7 @@ Most external cheats provide an overlay‑based menu (DirectX 11/12 hook) that a
 
 ## 🔑 Technical Summary
 
-Fortnite Terminal Cheat | ResPocket Edition exemplifies the effectiveness of external memory‑editing tools in evading EAC and BattlEye. By relying on `ReadProcessMemory`/`WriteProcessMemory`, dynamic offset resolution, and an external overlay, it achieves a functional set of features — ESP, aimbot, skin changer, and automation — with a relatively low risk of detection. However, server‑side heuristics and evolving anti‑cheat systems remain significant threats. Users must fully understand these risks and operate within legal boundaries.
+Fortnite Absolute Cheat | ResPocket Edition exemplifies the effectiveness of external memory‑editing tools in evading EAC and BattlEye. By relying on `ReadProcessMemory`/`WriteProcessMemory`, dynamic offset resolution, and an external overlay, it achieves a functional set of features — ESP, aimbot, skin changer, and automation — with a relatively low risk of detection. However, server‑side heuristics and evolving anti‑cheat systems remain significant threats. Users must fully understand these risks and operate within legal boundaries.
 
 ---
 
