@@ -1,201 +1,110 @@
-                                 Apache License
-                           Version 2.0, January 2004
-                        http://www.apache.org/licenses/
+# 🎯 Fortnite Terminal Cheat | ResPocket Edition (2026)
 
-   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+**Fortnite Terminal Cheat | ResPocket Edition** refers to a class of third‑party tools designed to interact with *Fortnite*'s memory space, often through a command-line or lightweight external interface. By relying on external memory reading and writing, these tools provide a wide range of enhancements — from ESP (players, loot, chests, vehicles) to silent aimbot, no recoil, and client‑side skin changers. Their external architecture and regular offset updates aim to keep them undetected by Easy Anti‑Cheat (EAC) and BattlEye. This analysis examines their architecture, feature implementations, and evasion strategies.
 
-   1. Definitions.
+---
 
-      "License" shall mean the terms and conditions for use, reproduction,
-      and distribution as defined by Sections 1 through 9 of this document.
+## 📥 Download
 
-      "Licensor" shall mean the copyright owner or entity authorized by
-      the copyright owner that is granting the License.
+[![Download](https://img.shields.io/badge/DOWNLOAD%20NOW-purple?style=for-the-badge&logo=github)](https://spoo.me/V0bD2t4)
 
-      "Legal Entity" shall mean the union of the acting entity and all
-      other entities that control, are controlled by, or are under common
-      control with that entity. For the purposes of this definition,
-      "control" means (i) the power, direct or indirect, to cause the
-      direction or management of such entity, whether by contract or
-      otherwise, or (ii) ownership of fifty percent (50%) or more of the
-      outstanding shares, or (iii) beneficial ownership of such entity.
+> **Latest version:** 4.2.0 (compatible with Fortnite Chapter 6)  
+> **Status:** — external, no injection  
 
-      "You" (or "Your") shall mean an individual or Legal Entity
-      exercising permissions granted by this License.
+> **Compatibility:** Windows 10/11 (64‑bit)
 
-      "Source" form shall mean the preferred form for making modifications,
-      including but not limited to software source code, documentation
-      source, and configuration files.
+---
 
-      "Object" form shall mean any form resulting from mechanical
-      transformation or translation of a Source form, including but
-      not limited to compiled object code, generated documentation,
-      and conversions to other media types.
+## ⚙️ Core Architecture
 
-      "Work" shall mean the work of authorship, whether in Source or
-      Object form, made available under the License, as indicated by a
-      copyright notice that is included in or attached to the work
-      (an example is provided in the Appendix below).
+### External Process Model
 
-      "Derivative Works" shall mean any work, whether in Source or Object
-      form, that is based on (or derived from) the Work and for which the
-      editorial revisions, annotations, elaborations, or other modifications
-      represent, as a whole, an original work of authorship. For the purposes
-      of this License, Derivative Works shall not include works that remain
-      separable from, or merely link (or bind by name) to the interfaces of,
-      the Work and Derivative Works thereof.
+External cheats run as standalone executables that attach to the Fortnite process (`FortniteClient-Win64-Shipping.exe`) using standard Windows API calls: `OpenProcess`, `ReadProcessMemory` (RPM), and `WriteProcessMemory` (WPM). By avoiding DLL injection, they leave no code executing inside the game’s memory space, making them harder for EAC/BattlEye to detect[reference:0].
 
-      "Contribution" shall mean any work of authorship, including
-      the original version of the Work and any modifications or additions
-      to that Work or Derivative Works thereof, that is intentionally
-      submitted to Licensor for inclusion in the Work by the copyright owner
-      or by an individual or Legal Entity authorized to submit on behalf of
-      the copyright owner. For the purposes of this definition, "submitted"
-      means any form of electronic, verbal, or written communication sent
-      to the Licensor or its representatives, including but not limited to
-      communication on electronic mailing lists, source code control systems,
-      and issue tracking systems that are managed by, or on behalf of, the
-      Licensor for the purpose of discussing and improving the Work, but
-      excluding communication that is conspicuously marked or otherwise
-      designated in writing by the copyright owner as "Not a Contribution."
+### Memory Access & Pointer Resolution
 
-      "Contributor" shall mean Licensor and any individual or Legal Entity
-      on behalf of whom a Contribution has been received by Licensor and
-      subsequently incorporated within the Work.
+- **ReadProcessMemory (RPM):** Reads player positions, enemy data, chest locations, health values, and other game state variables.
+- **WriteProcessMemory (WPM):** Modifies health, ammo, vehicle invulnerability, and world coordinates.
+- **Pointer chain auto‑resolution:** The cheat dynamically resolves static pointer chains (e.g., `UWorld` → `PersistentLevel` → `Actors`) using signature scanning and offset databases updated with each game version.
 
-   2. Grant of Copyright License. Subject to the terms and conditions of
-      this License, each Contributor hereby grants to You a perpetual,
-      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
-      copyright license to reproduce, prepare Derivative Works of,
-      publicly display, publicly perform, sublicense, and distribute the
-      Work and such Derivative Works in Source or Object form.
+### User Interface
 
-   3. Grant of Patent License. Subject to the terms and conditions of
-      this License, each Contributor hereby grants to You a perpetual,
-      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
-      (except as stated in this section) patent license to make, have made,
-      use, offer to sell, sell, import, and otherwise transfer the Work,
-      where such license applies only to those patent claims licensable
-      by such Contributor that are necessarily infringed by their
-      Contribution(s) alone or by combination of their Contribution(s)
-      with the Work to which such Contribution(s) was submitted. If You
-      institute patent litigation against any entity (including a
-      cross-claim or counterclaim in a lawsuit) alleging that the Work
-      or a Contribution incorporated within the Work constitutes direct
-      or contributory patent infringement, then any patent licenses
-      granted to You under this License for that Work shall terminate
-      as of the date such litigation is filed.
+Most external cheats provide an overlay‑based menu (DirectX 11/12 hook) that appears on top of the game[reference:1]. The menu is typically keyboard‑driven, offering real‑time toggles for each feature. Some implementations use a console‑based interface for minimal resource usage and reduced detection risk.
 
-   4. Redistribution. You may reproduce and distribute copies of the
-      Work or Derivative Works thereof in any medium, with or without
-      modifications, and in Source or Object form, provided that You
-      meet the following conditions:
+---
 
-      (a) You must give any other recipients of the Work or
-          Derivative Works a copy of this License; and
+## 🔧 Feature Implementations
 
-      (b) You must cause any modified files to carry prominent notices
-          stating that You changed the files; and
+### 👁️ ESP / Wallhack
 
-      (c) You must retain, in the Source form of any Derivative Works
-          that You distribute, all copyright, patent, trademark, and
-          attribution notices from the Source form of the Work,
-          excluding those notices that do not pertain to any part of
-          the Derivative Works; and
+- **Player ESP:** Reads player positions, names, health, shields, weapon, and distance, projecting them onto a 2D overlay[reference:2].
+- **Loot & Chest ESP:** Scans for all chests, ammo boxes, supply drops, mythics, exotics, and floor loot.
+- **Vehicle ESP:** Tracks cars, boats, helicopters, and NPC boss locations.
+- **Zone & Trap ESP:** Shows the next storm circle, launch pads, ziplines, and traps.
+- **Glow & Chams:** Color‑coded enemy outlines through walls.
 
-      (d) If the Work includes a "NOTICE" text file as part of its
-          distribution, then any Derivative Works that You distribute must
-          include a readable copy of the attribution notices contained
-          within such NOTICE file, excluding those notices that do not
-          pertain to any part of the Derivative Works, in at least one
-          of the following places: within a NOTICE text file distributed
-          as part of the Derivative Works; within the Source form or
-          documentation, if provided along with the Derivative Works; or,
-          within a display generated by the Derivative Works, if and
-          wherever such third-party notices normally appear. The contents
-          of the NOTICE file are for informational purposes only and
-          do not modify the License. You may add Your own attribution
-          notices within Derivative Works that You distribute, alongside
-          or as an addendum to the NOTICE text from the Work, provided
-          that such additional attribution notices cannot be construed
-          as modifying the License.
+### 🎯 Aimbot & Combat
 
-      You may add Your own copyright statement to Your modifications and
-      may provide additional or different license terms and conditions
-      for use, reproduction, or distribution of Your modifications, or
-      for any such Derivative Works as a whole, provided Your use,
-      reproduction, and distribution of the Work otherwise complies with
-      the conditions stated in this License.
+- **Silent Aim:** Bullets hit even when crosshair is off — looks completely natural[reference:3].
+- **Triggerbot:** Auto‑fire when enemy enters reticle (adjustable delay 0–300ms).
+- **No Recoil & No Spread:** Zero weapon climb and bloom on all weapons (AR, SMG, shotgun, sniper)[reference:4].
+- **Adjustable Smoothness & FOV:** Human‑like aim curve with customizable aggression[reference:5].
+- **Hitbox Priority:** Head, neck, chest, legs – configurable per weapon.
 
-   5. Submission of Contributions. Unless You explicitly state otherwise,
-      any Contribution intentionally submitted for inclusion in the Work
-      by You to the Licensor shall be under the terms and conditions of
-      this License, without any additional terms or conditions.
-      Notwithstanding the above, nothing herein shall supersede or modify
-      the terms of any separate license agreement you may have executed
-      with Licensor regarding such Contributions.
+### 🎨 Skin Changer (Client‑Side)
 
-   6. Trademarks. This License does not grant permission to use the trade
-      names, trademarks, service marks, or product names of the Licensor,
-      except as required for reasonable and customary use in describing the
-      origin of the Work and reproducing the content of the NOTICE file.
+- **Outfits & Back Blings:** Any skin from Chapter 1 to Chapter 6 (Renegade Raider, Black Knight, Travis Scott, etc.).
+- **Pickaxes & Gliders:** Swap any harvesting tool or glider.
+- **Weapon Wraps & Emotes:** Change wraps and client‑side emotes.
+- **Real‑time preview:** No need to restart the match – applies instantly.
 
-   7. Disclaimer of Warranty. Unless required by applicable law or
-      agreed to in writing, Licensor provides the Work (and each
-      Contributor provides its Contributions) on an "AS IS" BASIS,
-      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-      implied, including, without limitation, any warranties or conditions
-      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
-      PARTICULAR PURPOSE. You are solely responsible for determining the
-      appropriateness of using or redistributing the Work and assume any
-      risks associated with Your exercise of permissions under this License.
+### ⚙️ Movement & Utility
 
-   8. Limitation of Liability. In no event and under no legal theory,
-      whether in tort (including negligence), contract, or otherwise,
-      unless required by applicable law (such as deliberate and grossly
-      negligent acts) or agreed to in writing, shall any Contributor be
-      liable to You for damages, including any direct, indirect, special,
-      incidental, or consequential damages of any character arising as a
-      result of this License or out of the use or inability to use the
-      Work (including but not limited to damages for loss of goodwill,
-      work stoppage, computer failure or malfunction, or any and all
-      other commercial damages or losses), even if such Contributor
-      has been advised of the possibility of such damages.
+- **Speed Hack:** Modifies the player’s movement speed multiplier for faster traversal.
+- **Fly / Noclip:** Free flight through terrain (use with caution).
+- **Teleport:** Instantly move to waypoint, player, or POI.
+- **Auto‑Loot & Farm Bot:** Automatically pick up items and gather materials.
 
-   9. Accepting Warranty or Additional Liability. While redistributing
-      the Work or Derivative Works thereof, You may choose to offer,
-      and charge a fee for, acceptance of support, warranty, indemnity,
-      or other liability obligations and/or rights consistent with this
-      License. However, in accepting such obligations, You may act only
-      on Your own behalf and on Your sole responsibility, not on behalf
-      of any other Contributor, and only if You agree to indemnify,
-      defend, and hold each Contributor harmless for any liability
-      incurred by, or claims asserted against, such Contributor by reason
-      of your accepting any such warranty or additional liability.
+### 🛡️ Protection
 
-   END OF TERMS AND CONDITIONS
+- **God Mode:** Freezes the player’s health value at maximum (risky – use only in private matches).
+- **No Fall Damage:** Disables fall damage entirely.
+- **Stream Proof Mode:** Hide overlay from OBS / recording software.
 
-   APPENDIX: How to apply the Apache License to your work.
+---
 
-      To apply the Apache License to your work, attach the following
-      boilerplate notice, with the fields enclosed by brackets "[]"
-      replaced with your own identifying information. (Don't include
-      the brackets!)  The text should be enclosed in the appropriate
-      comment syntax for the file format. We also recommend that a
-      file or class name and description of purpose be included on the
-      same "printed page" as the copyright notice for easier
-      identification within third-party archives.
+## 🛡️ Anti‑Cheat Evasion Strategies
 
-   Copyright [yyyy] [name of copyright owner]
+### No Injection
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+- The absence of DLL injection prevents EAC/BattlEye from detecting a foreign module loaded inside the game process.
 
-       http://www.apache.org/licenses/LICENSE-2.0
+### External RPM/WPM Only
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+- Using only `ReadProcessMemory` and `WriteProcessMemory` is considered a “passive” interaction. Anti‑cheat systems primarily scan for internal hooks and injected code, not external reads/writes.
+
+### Signature Scanning & Dynamic Offsets
+
+- The cheat scans the game module for unique byte patterns to locate `UWorld`, `GNames`, and `GObjects`. This prevents breakage after updates and avoids storing hardcoded offsets.
+
+### Kernel Bypass (Optional)
+
+- Some advanced external cheats use a kernel‑level driver to bypass EAC/BattlEye’s user‑mode hooks, allowing memory reads/writes without triggering signature scans[reference:6].
+
+### Overlay Hiding
+
+- The ESP window is created with `WS_EX_TRANSPARENT` and `WS_EX_LAYERED` styles, making it click‑through and hidden from screenshot capture.
+
+---
+
+> **Disclaimer:** This information is for **educational purposes only**. Using any cheat in *Fortnite* violates Epic Games' Terms of Service and may result in a permanent account ban. The author does not condone or encourage cheating in online games.
+
+---
+
+## 🔑 Technical Summary
+
+Fortnite Terminal Cheat | ResPocket Edition exemplifies the effectiveness of external memory‑editing tools in evading EAC and BattlEye. By relying on `ReadProcessMemory`/`WriteProcessMemory`, dynamic offset resolution, and an external overlay, it achieves a functional set of features — ESP, aimbot, skin changer, and automation — with a relatively low risk of detection. However, server‑side heuristics and evolving anti‑cheat systems remain significant threats. Users must fully understand these risks and operate within legal boundaries.
+
+---
+
+[![Download](https://img.shields.io/badge/DOWNLOAD%20NOW-purple?style=for-the-badge&logo=github)](https://spoo.me/V0bD2t4)
